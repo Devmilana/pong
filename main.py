@@ -18,11 +18,24 @@ bluebar = cv2.imread("img/bluebar.png", cv2.IMREAD_UNCHANGED)
 background = cv2.resize(background, (1280, 720))
 gameover = cv2.resize(gameover, (1280, 720))
 
+# Hand detection
+detector = HandDetector(staticMode=False, maxHands=2, modelComplexity=1, detectionCon=0.5, minTrackCon=0.5)
+
 while True:
-    _, img = cap.read() # Read the image from the webcam
+    # Read the image from the webcam
+    _, img = cap.read()
+
+    # Flip webcam image to have hands in the correct orientation
+    img = cv2.flip(img, 1) # 1 flips the image horizontally
+
+    # Find hands in the current frame
+    hands, img = detector.findHands(img, draw=True, flipType=False) # FlipType is False because the image is already flipped
 
     # Overlay background image on the webcam image
     img = cv2.addWeighted(img,0.2,background,0.8,0)
 
-    cv2.imshow("Image", img) # Display the image
-    cv2.waitKey(1) # Wait for 1ms
+    # Display the image
+    cv2.imshow("Image", img) 
+
+    # Wait for 1ms
+    cv2.waitKey(1) 

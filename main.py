@@ -1,5 +1,6 @@
 import cv2
 import cvzone
+import numpy as np
 from cvzone.HandTrackingModule import HandDetector
 
 # Capture webcam
@@ -37,9 +38,20 @@ while True:
     # Check for hands
     if hands:
         for hand in hands:
+            x, y, w, h = hand['bbox']
+            
+            # Dynamically take bar dimensions
+            h1, w1, _ = bluebar.shape
+            
+            # Calculate the position of the bar (middle of the bar)
+            y1 = y - h1//2
+
+            # Clip bar movement to remain within screen
+            y1 = np.clip(y1, 20, 475)
+
             if hand['type'] == "Left":
                 # Draw in pong bar
-                img = cvzone.overlayPNG(img, bluebar, (40, 80))
+                img = cvzone.overlayPNG(img, bluebar, (40, y1))
 
     # Draw in pong ball
     img = cvzone.overlayPNG(img, ball, (100, 100))

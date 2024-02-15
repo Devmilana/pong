@@ -34,6 +34,16 @@ while True:
     # Overlay background image on the webcam image
     img = cv2.addWeighted(img,0.2,background,0.8,0)
 
+    # Check for hands
+    if hands:
+        for hand in hands:
+            if hand['type'] == "Left":
+                # Draw in pong bar
+                img = cvzone.overlayPNG(img, bluebar, (40, 80))
+
+    # Draw in pong ball
+    img = cvzone.overlayPNG(img, ball, (100, 100))
+
     # Display the image
     cv2.imshow("Image", img) 
 

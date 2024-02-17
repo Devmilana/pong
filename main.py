@@ -25,7 +25,7 @@ detector = HandDetector(staticMode=False, maxHands=2, modelComplexity=1, detecti
 # Game variables
 bluebarPosX = 40
 redbarPosX = 1215
-ballPos = [100, 100]
+ballPos = [640, 360]
 ballSpeedX = 8
 ballSpeedY = 8
 ballBounceback = 35
@@ -94,7 +94,7 @@ while True:
         if score[0] > score[1]:
             cv2.putText(img, str(score[0]).zfill(2), (600, 390), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 3)
     
-        if score[0] < score[1]:
+        if score[1] > score[0]:
             cv2.putText(img, str(score[1]).zfill(2), (680, 390), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 3)
     
     # If game over false, continue ball movement
@@ -116,10 +116,17 @@ while True:
     cv2.imshow("Image", img)
 
     # Wait for 1ms
-    key = cv2.waitKey(1) 
+    key = cv2.waitKey(1)
+
+    if key == ord('q') or key == ord('Q') or cv2.getWindowProperty('Image', cv2.WND_PROP_VISIBLE) < 1:
+        break
+
     if key == ord('r') or key == ord('R'):
-        ballPos = [100, 100]
+        ballPos = [640, 360]
         score = [0, 0]
         gameoverFlag = False
         gameover = cv2.imread("img/gameover.png")
         gameover = cv2.resize(gameover, (1280, 720))
+
+cap.release()
+cv2.destroyAllWindows()

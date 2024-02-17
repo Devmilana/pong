@@ -90,7 +90,12 @@ while True:
     # If game over true, display game over image
     if gameoverFlag:
         img = gameover
-        cv2.putText(img, str(score[1]).zfill(2), (700, 390), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 5)
+
+        if score[0] > score[1]:
+            cv2.putText(img, str(score[0]).zfill(2), (600, 390), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 3)
+    
+        if score[0] < score[1]:
+            cv2.putText(img, str(score[1]).zfill(2), (680, 390), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 3)
     
     # If game over false, continue ball movement
     else:
@@ -108,7 +113,13 @@ while True:
     cv2.putText(img, str(score[1]), (900, 700), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 5)
 
     # Display the image
-    cv2.imshow("Image", img) 
+    cv2.imshow("Image", img)
 
     # Wait for 1ms
-    cv2.waitKey(1) 
+    key = cv2.waitKey(1) 
+    if key == ord('r') or key == ord('R'):
+        ballPos = [100, 100]
+        score = [0, 0]
+        gameoverFlag = False
+        gameover = cv2.imread("img/gameover.png")
+        gameover = cv2.resize(gameover, (1280, 720))

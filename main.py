@@ -33,6 +33,7 @@ gameBorderTop = 5
 gameBorderBottom = 579
 gameBorderLeft = 0
 gameBorderRight = 1280
+score = [0, 0]
 gameoverFlag = False
 
 while True:
@@ -70,6 +71,7 @@ while True:
                 if bluebarPosX < ballPos[0] < bluebarPosX + w1 and y1 < ballPos[1] < y1 + h1:
                     ballSpeedX = -ballSpeedX
                     ballPos[0] += ballBounceback
+                    score[0] += 1
 
             # If detected hand is the right hand, draw the red bar
             if hand['type'] == "Right":
@@ -79,6 +81,7 @@ while True:
                 if redbarPosX - 65 < ballPos[0] < redbarPosX and y1 < ballPos[1] < y1 + h1:
                     ballSpeedX = -ballSpeedX
                     ballPos[0] -= ballBounceback
+                    score[1] += 1
     
     # Game over if ball goes out of screen
     if ballPos[0] > gameBorderRight or ballPos[0] < gameBorderLeft:
@@ -87,6 +90,7 @@ while True:
     # If game over true, display game over image
     if gameoverFlag:
         img = gameover
+        cv2.putText(img, str(score[1]).zfill(2), (700, 390), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 5)
     
     # If game over false, continue ball movement
     else:
@@ -98,6 +102,10 @@ while True:
 
     # Draw in pong ball
     img = cvzone.overlayPNG(img, ball, ballPos)
+
+    # Display score
+    cv2.putText(img, str(score[0]), (300, 700), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 5)
+    cv2.putText(img, str(score[1]), (900, 700), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 5)
 
     # Display the image
     cv2.imshow("Image", img) 

@@ -5,8 +5,8 @@ from cvzone.HandTrackingModule import HandDetector
 
 # Capture webcam
 cap = cv2.VideoCapture(0) # Captures first webcam
-cap.set(3, 1280) # Width of capture frame
-cap.set(4, 720) # Height of capture frame
+cap.set(3, 1920) # Width of capture frame
+cap.set(4, 1080) # Height of capture frame
 
 # Import images
 background = cv2.imread("img/background.png")
@@ -16,23 +16,25 @@ redbar = cv2.imread("img/redbar.png", cv2.IMREAD_UNCHANGED)
 bluebar = cv2.imread("img/bluebar.png", cv2.IMREAD_UNCHANGED)
 
 # Resize images
-background = cv2.resize(background, (1280, 720))
-gameover = cv2.resize(gameover, (1280, 720))
+background = cv2.resize(background, (1920, 1080))
+gameover = cv2.resize(gameover, (1920, 1080))
 
 # Hand detection
 detector = HandDetector(staticMode=False, maxHands=2, modelComplexity=1, detectionCon=0.5, minTrackCon=0.5)
 
 # Game variables
-bluebarPosX = 40
-redbarPosX = 1215
-ballPos = [640, 360]
-ballSpeedX = 8
-ballSpeedY = 8
-ballBounceback = 35
-gameBorderTop = 5
-gameBorderBottom = 579
+bluebarPosX = 58
+redbarPosX = 1816
+barClipTop = 45
+barClipBottom = 693
+ballPos = [960, 540]
+ballSpeedX = 10
+ballSpeedY = 10
+ballBounceback = 40
+gameBorderTop = 30
+gameBorderBottom = 850
 gameBorderLeft = 0
-gameBorderRight = 1280
+gameBorderRight = 1900
 score = [0, 0]
 gameoverFlag = False
 
@@ -42,6 +44,9 @@ while True:
 
     # Flip webcam image to have hands in the correct orientation
     img = cv2.flip(img, 1) # 1 flips the image horizontally
+
+    # Resize img to match the dimensions of background
+    img = cv2.resize(img, (1920, 1080))
 
     # Find hands in the current frame
     hands, img = detector.findHands(img, draw=True, flipType=False) # FlipType is False because the image is already flipped
@@ -61,7 +66,7 @@ while True:
             y1 = y - h1//2
 
             # Clip bar movement to remain within screen
-            y1 = np.clip(y1, 20, 475)
+            y1 = np.clip(y1, barClipTop, barClipBottom)
 
             # If detected hand is the left hand, draw the blue bar
             if hand['type'] == "Left":
@@ -109,8 +114,8 @@ while True:
     img = cvzone.overlayPNG(img, ball, ballPos)
 
     # Display score
-    cv2.putText(img, str(score[0]), (300, 700), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 5)
-    cv2.putText(img, str(score[1]), (900, 700), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 5)
+    cv2.putText(img, str(score[0]), (480, 1000), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 5)
+    cv2.putText(img, str(score[1]), (1440, 1000), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 5)
 
     # Display the image
     cv2.imshow("Image", img)
@@ -122,11 +127,10 @@ while True:
         break
 
     if key == ord('r') or key == ord('R'):
-        ballPos = [640, 360]
+        ballPos = [960, 540]
         score = [0, 0]
         gameoverFlag = False
         gameover = cv2.imread("img/gameover.png")
-        gameover = cv2.resize(gameover, (1280, 720))
 
 cap.release()
 cv2.destroyAllWindows()

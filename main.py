@@ -28,8 +28,8 @@ redbarPosX = 1816
 barClipTop = 45
 barClipBottom = 693
 ballPos = [960, 540]
-ballSpeedX = 10
-ballSpeedY = 10
+ballSpeedX = 25
+ballSpeedY = 25
 ballBounceback = 40
 gameBorderTop = 30
 gameBorderBottom = 850
@@ -89,7 +89,13 @@ while True:
                     score[1] += 1
     
     # Game over if ball goes out of screen
-    if ballPos[0] > gameBorderRight or ballPos[0] < gameBorderLeft:
+    if ballPos[0] > gameBorderRight:
+        if not gameoverFlag:
+            score[0] += 1 # Increment blue side score if ball goes out of screen of red side
+        gameoverFlag = True
+    elif ballPos[0] < gameBorderLeft:
+        if not gameoverFlag:
+            score[1] += 1 # Increment red side score if ball goes out of screen of blue side
         gameoverFlag = True
         
     # If game over true, display game over image
@@ -97,10 +103,12 @@ while True:
         img = gameover
 
         if score[0] > score[1]:
-            cv2.putText(img, str(score[0]).zfill(2), (600, 390), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 3)
+            cv2.putText(img, str('BLUE'), (670, 431), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 0, 0), 3)
+            cv2.putText(img, str(score[0]).zfill(2), (1050, 563), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 3)
     
         if score[1] > score[0]:
-            cv2.putText(img, str(score[1]).zfill(2), (680, 390), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 3)
+            cv2.putText(img, str('RED'), (715, 431), cv2.FONT_HERSHEY_COMPLEX, 2, (0, 0, 255), 3)
+            cv2.putText(img, str(score[1]).zfill(2), (1050, 563), cv2.FONT_HERSHEY_COMPLEX, 2, (255, 255, 255), 3)
     
     # If game over false, continue ball movement
     else:

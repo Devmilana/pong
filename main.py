@@ -45,8 +45,8 @@ redbarPosX = int(1816 * scale_x)
 barClipTop = int(45 * scale_y)
 barClipBottom = int(693 * scale_y)
 ballPos = [int(960 * scale_x), int(540 * scale_y)]
-ballSpeedX = int(15 * scale_x)
-ballSpeedY = int(15 * scale_y)
+ballSpeedX = int(25 * scale_x)
+ballSpeedY = int(25 * scale_y)
 ballBounceback = int(40 * scale_x)
 gameBorderTop = int(30 * scale_y)
 gameBorderBottom = int(850 * scale_y)
@@ -107,6 +107,7 @@ while True:
                     ballPos[0] -= ballBounceback
                     score[1] += 1
                     speedMultiplier += 0.1 # Increase speed multiplier
+
 
     # Game over if ball goes out of screen
     if ballPos[0] > gameBorderRight:
